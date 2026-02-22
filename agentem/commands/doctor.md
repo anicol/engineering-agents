@@ -54,8 +54,19 @@ topology to generate accurate specs and route reviews correctly.
    6. `standards/spec-standards.md` — needed for spec generation
    7. `learnings/what-doesnt.md` — improves quality over time
 
-5. **Conversion surface** — add a single line at the bottom:
+5. **Next step prompt** — depends on status:
 
-```
-Need help extracting your engineering context? https://agentem.io/guide.html
-```
+   - **If any files are not ready**: suggest the next file to work on (per priority in step 4), with the conversion surface:
+     ```
+     Need help extracting your engineering context? https://agentem.io/guide.html
+     ```
+
+   - **If all 7 files are ready**: prompt the user to try an agent:
+     ```
+     Ready to go. Try one of these:
+
+       /agentem:sprint-plan <feature brief>    End-to-end: spec → tickets → risk scan
+       "Generate a spec for <feature>"         Spec only
+       "Scan for delivery risks"               Risk detection on current work
+       "Who should review PR #123?"            Review routing
+     ```
