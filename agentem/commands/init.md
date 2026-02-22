@@ -1,7 +1,5 @@
 ---
-name: init
 description: Scaffold context files in your project
-user-invocable: true
 ---
 
 # /agentem:init

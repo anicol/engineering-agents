@@ -1,7 +1,5 @@
 ---
-name: sprint-plan
 description: Generate a spec, decompose into tickets, and scan for risks
-user-invocable: true
 ---
 
 # /agentem:sprint-plan

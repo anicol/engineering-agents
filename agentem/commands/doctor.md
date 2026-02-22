@@ -1,7 +1,5 @@
 ---
-name: doctor
 description: Check the health of your context files
-user-invocable: true
 ---
 
 # /agentem:doctor
