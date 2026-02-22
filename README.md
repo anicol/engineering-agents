@@ -81,6 +81,16 @@ Most teams get the plugin running in 30 minutes, then stall on context because e
 
 [Book a 30-minute call](https://calendly.com/alistair_nicol/30-min) - we'll map your workflow and show you what the system looks like with your team's actual context.
 
+## Staying up to date
+
+Third-party plugins don't auto-update by default. To get new versions automatically:
+
+1. Open Claude Code and run `/plugin`
+2. Select **manage** → find **agentem**
+3. Enable **auto-update**
+
+Without auto-update, run `/plugin marketplace update` to pull the latest version manually.
+
 ## Development
 
 ```
