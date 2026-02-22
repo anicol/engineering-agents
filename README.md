@@ -83,13 +83,13 @@ Most teams get the plugin running in 30 minutes, then stall on context because e
 
 ## Staying up to date
 
-Third-party plugins don't auto-update by default. To get new versions automatically:
+Third-party plugins don't auto-update by default. To get new versions automatically, run:
 
-1. Open Claude Code and run `/plugin`
-2. Navigate to **Marketplaces** → select **engineering-agents**
-3. Enable **auto-update**
+```
+/plugin marketplace update
+```
 
-Without auto-update, run `/plugin marketplace update` to pull the latest version manually.
+This takes you to the marketplace manager where you can enable **auto-update** for `engineering-agents`. Once enabled, new versions are pulled automatically at session start.
 
 ## Development
 
