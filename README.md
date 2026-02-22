@@ -1,4 +1,4 @@
-# AgentEM — Engineering Management Agents for Claude Code
+# AgentEM - Engineering Management Agents for Claude Code
 
 6 AI agents that handle specs, ticket decomposition, risk detection, review routing, release management, and sprint retrospectives. Encoded with your team's engineering judgment.
 
@@ -28,7 +28,7 @@
    ```
    /agentem:init
    ```
-   This creates 7 context files in `context/` — your product strategy, architecture map, team topology, capacity, review standards, spec conventions, and learnings.
+   This creates 7 context files in `context/` - your product strategy, architecture map, team topology, capacity, review standards, spec conventions, and learnings.
 
 3. **Fill in context files.** Start with `context/product/strategy.md`. The more specific you are, the better the agents perform. "We use microservices" is useless. "We have 4 services: auth (Python/FastAPI), api (TypeScript/Express), worker (Go), dashboard (Next.js)" is useful.
 
@@ -43,7 +43,7 @@
    ```
    /agentem:sprint-plan Build user notification preferences
    ```
-   This chains spec generation → ticket decomposition → risk detection.
+   This chains spec generation, ticket decomposition, and risk detection.
 
 ## Commands
 
@@ -51,7 +51,7 @@
 |---------|-------------|
 | `/agentem:init` | Scaffold `context/` directory with 7 template files |
 | `/agentem:doctor` | Check which context files exist and how complete they are |
-| `/agentem:sprint-plan` | End-to-end: spec → tickets → risk scan |
+| `/agentem:sprint-plan` | End-to-end: spec, tickets, risk scan |
 
 ## Context files
 
@@ -69,9 +69,9 @@ The agents are only as good as the context you give them. Generic prompts produc
 
 ## What this doesn't include
 
-- **Automation** — No cron scheduling, webhook triggers, or Slack delivery. Agents run when you invoke them.
-- **Integrations** — No Linear/Jira/Slack API connections. Agents use `gh` CLI when available, filesystem otherwise.
-- **Intelligence layer** — No confidence-based routing or autonomous execution. Agents run on request, with human review.
+- **Automation** - No cron scheduling, webhook triggers, or Slack delivery. Agents run when you invoke them.
+- **Integrations** - No Linear/Jira/Slack API connections. Agents use `gh` CLI when available, filesystem otherwise.
+- **Intelligence layer** - No confidence-based routing or autonomous execution. Agents run on request, with human review.
 
 These are part of the paid consulting tier. The plugin gives you the agents and context structure. The consulting engagement adds extraction interviews, automation, integrations, and tuning.
 
@@ -79,7 +79,7 @@ These are part of the paid consulting tier. The plugin gives you the agents and 
 
 Most teams get the plugin running in 30 minutes, then stall on context because extracting engineering judgment is a different skill than prompting.
 
-[Book a 30-minute call](https://calendly.com/alistair_nicol/30-min) — we'll map your workflow and show you what the system looks like with your team's actual context.
+[Book a 30-minute call](https://calendly.com/alistair_nicol/30-min) - we'll map your workflow and show you what the system looks like with your team's actual context.
 
 ## Development
 
