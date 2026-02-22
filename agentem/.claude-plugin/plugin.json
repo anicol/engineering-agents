@@ -1,0 +1,12 @@
+{
+  "name": "agentem",
+  "description": "6 engineering management agents for Claude Code. Spec generation, ticket decomposition, risk detection, review orchestration, release management, and sprint retrospectives.",
+  "version": "0.1.0",
+  "author": {
+    "name": "AgentEM",
+    "url": "https://agentem.io"
+  },
+  "repository": "https://github.com/anicol/engineering-agents",
+  "license": "MIT",
+  "keywords": ["engineering", "management", "agents", "specs", "tickets", "risk", "review", "release", "retro"]
+}

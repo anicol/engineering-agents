@@ -1,0 +1,11 @@
+{
+  "name": "engineering-agents",
+  "description": "AI agents for engineering management. Spec generation, ticket decomposition, risk detection, review orchestration, release management, and sprint retrospectives.",
+  "version": "0.1.0",
+  "author": {
+    "name": "AgentEM",
+    "url": "https://agentem.io"
+  },
+  "repository": "https://github.com/anicol/engineering-agents",
+  "license": "MIT"
+}
