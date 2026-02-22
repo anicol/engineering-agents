@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "AI agents for engineering management",
-    "version": "0.1.1"
+    "version": "0.1.2"
   },
   "plugins": [
     {
       "name": "agentem",
       "source": "./agentem",
       "description": "6 engineering management agents for Claude Code. Spec generation, ticket decomposition, risk detection, review orchestration, release management, and sprint retrospectives.",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "author": {
         "name": "AgentEM"
       },
