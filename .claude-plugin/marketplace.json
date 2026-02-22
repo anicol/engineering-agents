@@ -1,11 +1,25 @@
 {
   "name": "engineering-agents",
-  "description": "AI agents for engineering management. Spec generation, ticket decomposition, risk detection, review orchestration, release management, and sprint retrospectives.",
-  "version": "0.1.0",
-  "author": {
+  "owner": {
     "name": "AgentEM",
-    "url": "https://agentem.io"
+    "email": "hello@agentem.io"
   },
-  "repository": "https://github.com/anicol/engineering-agents",
-  "license": "MIT"
+  "metadata": {
+    "description": "AI agents for engineering management",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "agentem",
+      "source": "./agentem",
+      "description": "6 engineering management agents for Claude Code. Spec generation, ticket decomposition, risk detection, review orchestration, release management, and sprint retrospectives.",
+      "version": "0.1.0",
+      "author": {
+        "name": "AgentEM"
+      },
+      "repository": "https://github.com/anicol/engineering-agents",
+      "license": "MIT",
+      "keywords": ["engineering", "management", "agents", "specs", "tickets", "risk", "review", "release", "retro"]
+    }
+  ]
 }
