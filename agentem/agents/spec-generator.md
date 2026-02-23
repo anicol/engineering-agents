@@ -3,6 +3,20 @@ name: spec-generator
 description: "Generates structured feature specifications from product briefs. Reads product strategy, architecture context, and team constraints to produce specs that respect existing patterns and decisions."
 tools: [Read, Grep, Glob, Bash]
 skills: [context-loader]
+requires:
+  env:
+    - GITHUB_TOKEN
+  context:
+    - product/strategy.md
+    - architecture/system-map.md
+    - standards/spec-standards.md
+  context_optional:
+    - architecture/adrs/
+    - architecture/tech-debt.md
+    - standards/definition-of-done.md
+    - learnings/what-works.md
+    - learnings/what-doesnt.md
+    - team/topology.md
 ---
 
 # Spec Generator

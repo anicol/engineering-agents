@@ -3,6 +3,14 @@ name: retro-analyzer
 description: "Analyzes sprint metrics, identifies delivery patterns, generates retrospective documents, and proposes updates to learnings files. Never directly updates learnings — proposes changes for human approval."
 tools: [Read, Grep, Glob, Bash]
 skills: [context-loader]
+requires:
+  env:
+    - GITHUB_TOKEN
+  context:
+    - learnings/what-works.md
+    - learnings/what-doesnt.md
+  context_optional:
+    - team/capacity.md
 ---
 
 # Retro Analyzer

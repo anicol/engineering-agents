@@ -3,6 +3,14 @@ name: review-orchestrator
 description: "Analyzes open PRs and suggests optimal reviewers based on expertise, load balance, and knowledge-spreading goals. Generates review summaries for complex PRs."
 tools: [Read, Grep, Glob, Bash]
 skills: [context-loader]
+requires:
+  env:
+    - GITHUB_TOKEN
+  context:
+    - standards/review-playbook.md
+    - team/topology.md
+  context_optional:
+    - standards/definition-of-done.md
 ---
 
 # Review Orchestrator
