@@ -3,6 +3,15 @@ name: release-manager
 description: "Aggregates completed work for a release, generates release notes and changelog, runs go/no-go checklist, and drafts stakeholder communication."
 tools: [Read, Grep, Glob, Bash]
 skills: [context-loader]
+requires:
+  env:
+    - GITHUB_TOKEN
+  context:
+    - standards/review-playbook.md
+    - team/topology.md
+  context_optional:
+    - process/release-process.md
+    - standards/definition-of-done.md
 ---
 
 # Release Manager

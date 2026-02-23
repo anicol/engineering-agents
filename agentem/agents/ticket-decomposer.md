@@ -3,6 +3,14 @@ name: ticket-decomposer
 description: "Breaks feature specifications into implementable tickets with acceptance criteria, estimates, and sprint plans. Takes a completed spec and produces work items respecting team capacity."
 tools: [Read, Grep, Glob, Bash]
 skills: [context-loader]
+requires:
+  env:
+    - GITHUB_TOKEN
+  context:
+    - team/topology.md
+    - team/capacity.md
+  context_optional:
+    - learnings/what-doesnt.md
 ---
 
 # Ticket Decomposer

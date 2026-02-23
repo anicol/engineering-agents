@@ -3,6 +3,15 @@ name: risk-detector
 description: "Scans development signals to detect delivery risks. Identifies stale PRs, blocked work, scope creep, capacity overload, cross-team dependencies, and standards drift. Produces a severity-ranked risk digest."
 tools: [Read, Grep, Glob, Bash]
 skills: [context-loader]
+requires:
+  env:
+    - GITHUB_TOKEN
+  context:
+    - architecture/system-map.md
+    - team/topology.md
+  context_optional:
+    - team/capacity.md
+    - process/escalation-paths.md
 ---
 
 # Risk Detector
