@@ -1,0 +1,38 @@
+# AgentEM Autonomy Configuration
+# Controls what actions agents can take without asking.
+#
+# Modes:
+#   autonomous       — Agent executes the action without asking
+#   requires_approval — Agent shows the command and asks Execute? [y/n] (default)
+#   disabled         — Agent skips the action silently
+#
+# Actions not listed here default to requires_approval.
+
+autonomous: {}
+  # risk-detector:
+  #   - scan
+
+requires_approval:
+  review-orchestrator:
+    - assign-reviewers
+    - nudge-stale-prs
+  risk-detector:
+    - create-issue
+    - comment-on-pr
+  release-manager:
+    - create-release
+    - save-artifacts
+  spec-generator:
+    - save-spec
+    - create-issue
+  ticket-decomposer:
+    - create-issues
+  retro-analyzer:
+    - update-learnings
+    - save-retro
+    - create-issues
+
+disabled: {}
+
+escalation:
+  critical_risk: log-only

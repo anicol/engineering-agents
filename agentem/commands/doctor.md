@@ -25,18 +25,31 @@ Diagnostic command that checks context file completeness, environment variables,
      - **Needs work** — file exists but mostly placeholders or very short
      - **Missing** — file doesn't exist
 
-3. **Check environment variables.** Read the YAML frontmatter from each agent file in `${CLAUDE_PLUGIN_ROOT}/agents/*.md`. Extract the `requires.env` list from each agent. Collect all unique env var names across agents. For each env var:
+3. **Check autonomy config.** Look for `context/autonomy.yaml`:
+   - If it exists, parse it and report:
+     - Number of actions configured as `autonomous`
+     - Number of actions configured as `requires_approval`
+     - Number of actions configured as `disabled`
+     - Escalation policy
+   - If it doesn't exist, note that all actions default to `requires_approval`
+   - If it exists but has parse errors, flag the error
+
+4. **Check agent state.** Look for `context/agent-state.json`:
+   - If it exists, report per-agent: last run time, run count, active signal count
+   - If it doesn't exist, note "No agent runs recorded yet"
+
+5. **Check environment variables.** Read the YAML frontmatter from each agent file in `${CLAUDE_PLUGIN_ROOT}/agents/*.md`. Extract the `requires.env` list from each agent. Collect all unique env var names across agents. For each env var:
    - Run `echo $VAR_NAME` to check if it is set (non-empty)
    - Also check: `which gh` (for GITHUB_TOKEN — the `gh` CLI is the primary GitHub interface)
    - Check optional integration vars: `LINEAR_API_KEY`, `SLACK_BOT_TOKEN`
    - Classify as **OK** (set) or **Not set**
 
-4. **Assess per-agent readiness.** For each agent, cross-reference its `requires.env` and `requires.context` against the results from steps 1-3. Classify each agent as:
+6. **Assess per-agent readiness.** For each agent, cross-reference its `requires.env` and `requires.context` against the results from steps 1-5. Classify each agent as:
    - **Ready** — all required env vars set AND all required context files are Ready
    - **Partial** — all required env vars set BUT some required context files are Missing or Needs work
    - **Blocked** — one or more required env vars are not set
 
-5. **Output a diagnostic report:**
+7. **Output a diagnostic report:**
 
 ```
 AgentEM Context Health Check
@@ -68,9 +81,24 @@ Agent Readiness:
   retro-analyzer .......................... Partial (context/learnings/what-doesnt.md needs work)
 
 Status: 1 of 6 agents ready
+
+Autonomy Config:
+  context/autonomy.yaml ..................... Present
+  Autonomous actions: 0
+  Requires approval: 9
+  Disabled actions: 0
+  Escalation policy: log-only
+
+Agent State:
+  risk-detector ............................. Last run: 2h ago (5 runs, 3 active signals)
+  spec-generator ............................ Last run: 1d ago (2 runs)
+  ticket-decomposer ......................... No runs recorded
+  review-orchestrator ....................... No runs recorded
+  release-manager ........................... No runs recorded
+  retro-analyzer ............................ No runs recorded
 ```
 
-6. **Suggest the next action**, computed dynamically based on what unblocks the most agents:
+8. **Suggest the next action**, computed dynamically based on what unblocks the most agents:
    - Count how many agents each missing/needs-work item affects
    - Suggest the single item that unblocks or improves the most agents
    - If an env var is missing and blocks agents, prioritize that over context files
@@ -83,7 +111,7 @@ Status: 1 of 6 agents ready
      6. `standards/spec-standards.md` — needed for spec generation
      7. `learnings/what-doesnt.md` — improves quality over time
 
-7. **Next step prompt** — depends on status:
+9. **Next step prompt** — depends on status:
 
    - **If any agents are Blocked**: suggest the fix that unblocks the most agents:
      ```

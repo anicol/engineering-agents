@@ -1,6 +1,6 @@
 # AgentEM - Engineering Management Agents for Claude Code
 
-6 AI agents that handle specs, ticket decomposition, risk detection, review routing, release management, and sprint retrospectives. Encoded with your team's engineering judgment.
+6 AI agents that handle specs, ticket decomposition, risk detection, review routing, release management, and sprint retrospectives. They remember what they've done, take real actions, chain intelligently, and learn from your feedback. Encoded with your team's engineering judgment.
 
 ## Install
 
@@ -13,12 +13,12 @@
 
 | Agent | What it does |
 |-------|-------------|
-| **Spec Generator** | Turns product briefs into implementation specs that respect your architecture and team constraints |
-| **Ticket Decomposer** | Breaks specs into right-sized tickets with acceptance criteria, estimates, and sprint sequencing |
-| **Risk Detector** | Scans for stale PRs, blocked work, scope creep, capacity overload, and dependency risks |
-| **Review Orchestrator** | Maps PRs to the right reviewers based on ownership, expertise, and load balance |
-| **Release Manager** | Generates release notes, changelog, go/no-go checklist, and stakeholder updates |
-| **Retro Analyzer** | Pulls sprint metrics, identifies patterns, generates retro docs, proposes learnings updates |
+| **Spec Generator** | Turns product briefs into specs, saves them, creates tracking issues |
+| **Ticket Decomposer** | Breaks specs into tickets, creates GitHub issues in batch or individually |
+| **Risk Detector** | Scans for risks, creates issues for critical risks, comments on stale PRs |
+| **Review Orchestrator** | Assigns reviewers to PRs, nudges stale reviews, balances review load |
+| **Release Manager** | Generates release artifacts, creates GitHub releases, saves changelogs |
+| **Retro Analyzer** | Generates retro docs, updates learnings, creates action item issues |
 
 ## Quick start
 
@@ -49,9 +49,11 @@
 
 | Command | What it does |
 |---------|-------------|
-| `/agentem:init` | Scaffold `context/` directory with 7 template files |
-| `/agentem:doctor` | Check which context files exist and how complete they are |
+| `/agentem:init` | Scaffold `context/` directory with 7 template files + autonomy config |
+| `/agentem:doctor` | Check context files, autonomy config, agent state, and agent readiness |
 | `/agentem:sprint-plan` | End-to-end: spec, tickets, risk scan |
+| `/agentem:status` | Dashboard: agent activity, risks, PR status, sprint health, effectiveness |
+| `/agentem:watch` | Poll GitHub for events and trigger agents (new PRs, stale PRs, merges) |
 
 ## Context files
 
@@ -66,14 +68,37 @@ The agents are only as good as the context you give them. Generic prompts produc
 | `standards/review-playbook.md` | Review philosophy, SLAs, focus areas, patterns | Review Orchestrator |
 | `standards/spec-standards.md` | Spec structure, conventions, quality bar | Spec Generator |
 | `learnings/what-doesnt.md` | Anti-patterns to avoid (updated after retros) | All agents |
+| `autonomy.yaml` | What agents can do without asking | All agents |
+
+## Autonomy config
+
+By default, agents ask before taking any action. Edit `context/autonomy.yaml` to control this:
+
+```yaml
+# Actions agents execute without asking
+autonomous:
+  risk-detector:
+    - scan
+
+# Actions that require your approval (default)
+requires_approval:
+  review-orchestrator:
+    - assign-reviewers
+  spec-generator:
+    - save-spec
+
+# Actions agents will never take
+disabled: {}
+```
+
+Agents also remember what they've done between runs, learn from your feedback, and offer to chain to relevant follow-up agents when they finish.
 
 ## What this doesn't include
 
-- **Automation** - No cron scheduling, webhook triggers, or Slack delivery. Agents run when you invoke them.
+- **Background automation** - Watch mode runs in-session. No cron scheduling, webhook triggers, or Slack delivery.
 - **Integrations** - No Linear/Jira/Slack API connections. Agents use `gh` CLI when available, filesystem otherwise.
-- **Intelligence layer** - No confidence-based routing or autonomous execution. Agents run on request, with human review.
 
-These are part of the paid consulting tier. The plugin gives you the agents and context structure. The consulting engagement adds extraction interviews, automation, integrations, and tuning.
+These are part of the paid consulting tier. The plugin gives you the agents, actions, memory, and context structure. The consulting engagement adds extraction interviews, background automation, integrations, and tuning.
 
 ## Ready to go further?
 

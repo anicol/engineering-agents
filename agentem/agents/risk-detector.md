@@ -1,7 +1,7 @@
 ---
 name: risk-detector
 description: "Scans development signals to detect delivery risks. Identifies stale PRs, blocked work, scope creep, capacity overload, cross-team dependencies, and standards drift. Produces a severity-ranked risk digest."
-tools: [Read, Grep, Glob, Bash]
+tools: [Read, Grep, Glob, Bash, Write]
 skills: [context-loader]
 requires:
   env:
@@ -48,9 +48,10 @@ For each available signal source:
 ### Step 3: Score and Prioritize
 For each detected signal:
 1. Assign severity: Critical / High / Medium / Low
-2. Identify owner from topology
-3. Suggest specific action
-4. Cross-reference against architecture context for blast radius
+2. Check feedback history from `context/agent-state.json`: if a signal TYPE (e.g., "stale-pr", "scope-creep") received "No" rating 3+ times in the last 10 runs, deprioritize it (lower severity by one level, minimum Low). Note when signals are deprioritized due to feedback: "(deprioritized — consistently dismissed by user)"
+3. Identify owner from topology
+4. Suggest specific action
+5. Cross-reference against architecture context for blast radius
 
 ### Step 4: Output
 Produce risk digest as markdown:
@@ -74,6 +75,35 @@ Produce risk digest as markdown:
 [Signal types that returned no issues]
 ```
 
+### Step 5: Actions
+For each actionable recommendation, check `context/autonomy.yaml`:
+
+1. **Create issue for critical risk** (`create-issue`):
+   - `gh issue create --title "RISK: {description}" --body "{details with evidence}" --label "risk,{severity}"`
+   - If `autonomous`: execute directly
+   - If `requires_approval`: show exact command and ask `Execute? [y/n]`
+   - If `disabled`: skip
+
+2. **Comment on stale PR** (`comment-on-pr`):
+   - `gh pr comment {number} --body "⚠️ Risk alert: This PR has been open {X} hours without review activity. Suggested reviewer: {name}"`
+   - If `autonomous`: execute directly
+   - If `requires_approval`: show exact command and ask `Execute? [y/n]`
+   - If `disabled`: skip
+
+Log all executed actions to the state file in Step 6.
+
+### Step 6: Update State
+1. Read `context/agent-state.json` if it exists, otherwise initialize an empty `{"version": 1, "agents": {}}` structure.
+2. Update the `risk-detector` entry:
+   - Set `last_run` to current ISO 8601 timestamp
+   - Increment `run_count`
+   - Set `last_summary` to a count summary (e.g., "Found 2 critical, 1 high, 3 medium risks")
+   - Add newly detected signals to `signals` array with unique IDs (format: `risk-{type}-{identifier}-{date}`), type, severity, description, `detected_at`, and `status: "active"`
+   - Resolve signals that are no longer present (e.g., stale PR was merged) — set `status: "resolved"`
+   - Preserve `dismissed` signals unchanged
+   - Log actions taken to `actions_taken`
+3. Write updated JSON back to `context/agent-state.json` using the Write tool.
+
 ## Detectable Signals
 - Scope creep (tickets added mid-sprint)
 - PR bottleneck (open > 48h, no review)
@@ -83,6 +113,23 @@ Produce risk digest as markdown:
 - Velocity anomaly (burndown 30%+ behind baseline at midpoint)
 - Knowledge concentration (bus factor)
 - Tech debt accumulation
+
+### Step 7: Chain Offers
+Based on the risk digest, offer relevant follow-up agents:
+- If critical risk on a PR: "Run review-orchestrator to assign reviewers and expedite?"
+- If scope creep detected: "Run ticket-decomposer to re-sequence work?"
+- If quality drift: "Run retro-analyzer to investigate patterns?"
+
+Only offer chains that are directly relevant to detected risks. Present as a simple list. User can accept, decline, or skip.
+
+### Step 8: Feedback
+Ask the user:
+```
+Was this output useful?  [Y] Yes  [P] Partially  [N] No
+```
+- Store response in `context/agent-state.json` under `agents.risk-detector.feedback` array with timestamp and rating
+- If `Partially` or `No`: ask "Which signal types were not useful?" and store as `feedback_note` — this feeds into signal suppression in Step 3 on future runs
+- If user skips or doesn't respond, do not store anything
 
 ## Error Handling
 - `gh` CLI not available → note which signals couldn't be scanned, suggest setup
