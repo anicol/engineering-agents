@@ -11,14 +11,14 @@
 
 ## What you get
 
-| Agent | What it does |
-|-------|-------------|
-| **Spec Generator** | Turns product briefs into specs, saves them, creates tracking issues |
-| **Ticket Decomposer** | Breaks specs into tickets, creates GitHub issues in batch or individually |
-| **Risk Detector** | Scans for risks, creates issues for critical risks, comments on stale PRs |
-| **Review Orchestrator** | Assigns reviewers to PRs, nudges stale reviews, balances review load |
-| **Release Manager** | Generates release artifacts, creates GitHub releases, saves changelogs |
-| **Retro Analyzer** | Generates retro docs, updates learnings, creates action item issues |
+| Command | What it does |
+|---------|-------------|
+| `/agentem:spec-generator` | Turns product briefs into specs, saves them, creates tracking issues |
+| `/agentem:ticket-decomposer` | Breaks specs into tickets, creates GitHub issues in batch or individually |
+| `/agentem:risk-detector` | Scans for risks, creates issues for critical risks, comments on stale PRs |
+| `/agentem:review-orchestrator` | Assigns reviewers to PRs, nudges stale reviews, balances review load |
+| `/agentem:release-manager` | Generates release artifacts, creates GitHub releases, saves changelogs |
+| `/agentem:retro-analyzer` | Generates retro docs, updates learnings, creates action item issues |
 
 ## Quick start
 
@@ -37,7 +37,11 @@
    /agentem:doctor
    ```
 
-5. **Run an agent.** Ask Claude to generate a spec, decompose tickets, scan for risks, or any of the 6 agent tasks.
+5. **Run an agent:**
+   ```
+   /agentem:risk-detector
+   /agentem:spec-generator
+   ```
 
 6. **Run the full flow:**
    ```
@@ -45,13 +49,19 @@
    ```
    This chains spec generation, ticket decomposition, and risk detection.
 
-## Commands
+## All commands
 
 | Command | What it does |
 |---------|-------------|
+| `/agentem:spec-generator` | Turns product briefs into specs, saves them, creates tracking issues |
+| `/agentem:ticket-decomposer` | Breaks specs into tickets, creates GitHub issues in batch or individually |
+| `/agentem:risk-detector` | Scans for risks, creates issues for critical risks, comments on stale PRs |
+| `/agentem:review-orchestrator` | Assigns reviewers to PRs, nudges stale reviews, balances review load |
+| `/agentem:release-manager` | Generates release artifacts, creates GitHub releases, saves changelogs |
+| `/agentem:retro-analyzer` | Generates retro docs, updates learnings, creates action item issues |
+| `/agentem:sprint-plan` | End-to-end: spec → tickets → risk scan |
 | `/agentem:init` | Scaffold `context/` directory with 8 template files + autonomy config |
 | `/agentem:doctor` | Check context files, autonomy config, agent state, and agent readiness |
-| `/agentem:sprint-plan` | End-to-end: spec, tickets, risk scan |
 | `/agentem:status` | Dashboard: agent activity, risks, PR status, sprint health, effectiveness |
 | `/agentem:watch` | Poll GitHub for events and trigger agents (new PRs, stale PRs, merges) |
 

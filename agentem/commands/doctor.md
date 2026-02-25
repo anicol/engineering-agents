@@ -132,7 +132,7 @@ Agent State:
      All agents ready. Try one of these:
 
        /agentem:sprint-plan <feature brief>    End-to-end: spec → tickets → risk scan
-       "Generate a spec for <feature>"         Spec only
-       "Scan for delivery risks"               Risk detection on current work
-       "Who should review PR #123?"            Review routing
+       /agentem:spec-generator                 Generate a spec from a product brief
+       /agentem:risk-detector                  Scan for delivery risks
+       /agentem:review-orchestrator            Route reviewers to a PR
      ```

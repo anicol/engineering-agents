@@ -5,8 +5,8 @@ This is the Claude Code plugin distribution of AgentEM. It packages 6 engineerin
 ## Directory Layout
 
 - `agentem/` — Plugin root (referenced as `$CLAUDE_PLUGIN_ROOT` at runtime)
-  - `agents/` — Agent definitions (one `.md` per agent)
-  - `commands/` — Slash command definitions (`init.md`, `doctor.md`, `sprint-plan.md`)
+  - `agents/` — Agent definitions (one `.md` per agent, source of truth)
+  - `commands/` — Slash command definitions; includes utility commands (`init.md`, `doctor.md`, etc.) and symlinks to each agent so they're also invocable as `/agentem:<agent-name>`
   - `context-templates/` — Template files copied into user projects by `/agentem:init`
   - `skills/` — Internal skills (e.g., `context-loader`) invoked by agents, not by users
 - `.claude-plugin/marketplace.json` — Plugin manifest for marketplace distribution
@@ -25,11 +25,19 @@ This is the Claude Code plugin distribution of AgentEM. It packages 6 engineerin
 
 ## Slash Commands
 
+All 6 agents are symlinked into `commands/`, so they're invocable as `/agentem:<agent-name>` in addition to being available as Task subagent types.
+
 | Command | What It Does |
 |---------|-------------|
-| `/agentem:init` | Scaffolds `context/` directory with 8 template files + autonomy config in the user's project |
-| `/agentem:doctor` | Checks context files, autonomy config, agent state, environment, and per-agent readiness |
+| `/agentem:spec-generator` | Generate a feature spec from a product brief |
+| `/agentem:ticket-decomposer` | Break a spec into implementable tickets |
+| `/agentem:risk-detector` | Scan for delivery risks |
+| `/agentem:review-orchestrator` | Route reviewers to a PR |
+| `/agentem:release-manager` | Generate release notes and go/no-go checklist |
+| `/agentem:retro-analyzer` | Generate a sprint retro and propose learnings updates |
 | `/agentem:sprint-plan` | Chains spec generation → ticket decomposition → risk detection end-to-end |
+| `/agentem:init` | Scaffolds `context/` directory with 8 template files + autonomy config |
+| `/agentem:doctor` | Checks context files, autonomy config, agent state, environment, and per-agent readiness |
 | `/agentem:status` | Dashboard — agent activity, current risks, PR status, sprint health, effectiveness scores |
 | `/agentem:watch` | Poll GitHub for events and trigger agents on new/stale/merged PRs |
 
