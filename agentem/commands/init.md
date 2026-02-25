@@ -4,7 +4,7 @@ description: Scaffold context files in your project
 
 # /agentem:init
 
-Scaffold the `context/` directory in the user's project root with 7 context files and the autonomy config.
+Scaffold the `context/` directory in the user's project root with 8 context files and the autonomy config.
 
 ## Steps
 
@@ -23,6 +23,7 @@ context/
 ├── standards/review-playbook.md
 ├── standards/spec-standards.md
 ├── learnings/what-doesnt.md
+├── learnings/what-works.md
 └── autonomy.yaml
 ```
 
@@ -44,6 +45,7 @@ Created context files:
   context/standards/review-playbook.md
   context/standards/spec-standards.md
   context/learnings/what-doesnt.md
+  context/learnings/what-works.md
   context/autonomy.yaml
 
 Added to .gitignore:
@@ -65,4 +67,5 @@ Run /agentem:doctor to check your progress.
 | `context/standards/review-playbook.md` | `${CLAUDE_PLUGIN_ROOT}/context-templates/standards/review-playbook.md` |
 | `context/standards/spec-standards.md` | `${CLAUDE_PLUGIN_ROOT}/context-templates/standards/spec-standards.md` |
 | `context/learnings/what-doesnt.md` | `${CLAUDE_PLUGIN_ROOT}/context-templates/learnings/what-doesnt.md` |
+| `context/learnings/what-works.md` | `${CLAUDE_PLUGIN_ROOT}/context-templates/learnings/what-works.md` |
 | `context/autonomy.yaml` | `${CLAUDE_PLUGIN_ROOT}/context-templates/autonomy.yaml` |

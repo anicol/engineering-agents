@@ -1,6 +1,6 @@
 # Engineering Agents — Claude Code Plugin
 
-This is the Claude Code plugin distribution of AgentEM. It packages 6 engineering management agents, 3 slash commands, and 7 context file templates into a Claude Code plugin that users install from the marketplace.
+This is the Claude Code plugin distribution of AgentEM. It packages 6 engineering management agents, 3 slash commands, and 8 context file templates into a Claude Code plugin that users install from the marketplace.
 
 ## Directory Layout
 
@@ -27,7 +27,7 @@ This is the Claude Code plugin distribution of AgentEM. It packages 6 engineerin
 
 | Command | What It Does |
 |---------|-------------|
-| `/agentem:init` | Scaffolds `context/` directory with 7 template files + autonomy config in the user's project |
+| `/agentem:init` | Scaffolds `context/` directory with 8 template files + autonomy config in the user's project |
 | `/agentem:doctor` | Checks context files, autonomy config, agent state, environment, and per-agent readiness |
 | `/agentem:sprint-plan` | Chains spec generation → ticket decomposition → risk detection end-to-end |
 | `/agentem:status` | Dashboard — agent activity, current risks, PR status, sprint health, effectiveness scores |
@@ -43,7 +43,7 @@ Every agent invokes the `context-loader` skill before its primary task. The cont
 
 If no context directory exists, agents proceed with best-effort reasoning and recommend `/agentem:init`.
 
-## Context Templates (7 files + config)
+## Context Templates (8 files + config)
 
 Templates live in `agentem/context-templates/` and are copied to the user's `context/` directory:
 
@@ -56,6 +56,7 @@ Templates live in `agentem/context-templates/` and are copied to the user's `con
 | `standards/review-playbook.md` | Review philosophy, SLAs, focus areas | Review Orchestrator |
 | `standards/spec-standards.md` | Spec structure, conventions, quality bar | Spec Generator |
 | `learnings/what-doesnt.md` | Anti-patterns to avoid (updated after retros) | All agents |
+| `learnings/what-works.md` | Proven patterns to reinforce (updated after retros) | All agents |
 | `autonomy.yaml` | Action permissions (autonomous/requires_approval/disabled) | All agents |
 
 ## State & Config Files

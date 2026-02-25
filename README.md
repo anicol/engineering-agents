@@ -28,7 +28,7 @@
    ```
    /agentem:init
    ```
-   This creates 7 context files in `context/` - your product strategy, architecture map, team topology, capacity, review standards, spec conventions, and learnings.
+   This creates 8 context files in `context/` - your product strategy, architecture map, team topology, capacity, review standards, spec conventions, and learnings (what works + what doesn't).
 
 3. **Fill in context files.** Start with `context/product/strategy.md`. The more specific you are, the better the agents perform. "We use microservices" is useless. "We have 4 services: auth (Python/FastAPI), api (TypeScript/Express), worker (Go), dashboard (Next.js)" is useful.
 
@@ -49,7 +49,7 @@
 
 | Command | What it does |
 |---------|-------------|
-| `/agentem:init` | Scaffold `context/` directory with 7 template files + autonomy config |
+| `/agentem:init` | Scaffold `context/` directory with 8 template files + autonomy config |
 | `/agentem:doctor` | Check context files, autonomy config, agent state, and agent readiness |
 | `/agentem:sprint-plan` | End-to-end: spec, tickets, risk scan |
 | `/agentem:status` | Dashboard: agent activity, risks, PR status, sprint health, effectiveness |

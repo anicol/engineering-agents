@@ -21,8 +21,9 @@ Close the feedback loop. Pull sprint metrics, identify patterns, document learni
 ## Workflow
 
 ### Step 1: Read Context
-1. `context/learnings/what-doesnt.md` — current state of learnings
-2. `context/team/capacity.md` — baseline capacity and estimation approach
+1. `context/learnings/what-doesnt.md` — anti-patterns to avoid
+2. `context/learnings/what-works.md` — proven patterns to reinforce
+3. `context/team/capacity.md` — baseline capacity and estimation approach
 
 ### Step 2: Gather Metrics
 From `gh` CLI (when available):
@@ -90,23 +91,24 @@ If no feedback data exists, skip this section and note it in the retro.
 - [ ] [Specific action with owner and due date]
 
 ## Proposed Learnings Updates
-[Changes to suggest for what-doesnt.md]
+[Changes to suggest for what-doesnt.md and what-works.md]
 ```
 
 ### Step 6: Propose Learnings Updates
 **CRITICAL:** Do NOT directly update learnings files. Present proposed additions to the human:
 - "I'd like to add to context/learnings/what-doesnt.md: [proposed entry]"
+- "I'd like to add to context/learnings/what-works.md: [proposed entry]"
 Wait for human approval before writing to learnings files.
 
 ### Step 7: Output
 1. Retro document (including Agent Effectiveness section from Step 4)
-2. If approved by human, append to `context/learnings/what-doesnt.md`
+2. If approved by human, append to `context/learnings/what-doesnt.md` and/or `context/learnings/what-works.md`
 
 ### Step 8: Actions
 For each actionable recommendation, check `context/autonomy.yaml`:
 
 1. **Update learnings** (`update-learnings`):
-   - Write approved entries to `context/learnings/what-doesnt.md`
+   - Write approved entries to `context/learnings/what-doesnt.md` and/or `context/learnings/what-works.md`
    - **CRITICAL:** The existing approval gate from Step 6 still applies — only write if human approved
    - If `autonomous`: write directly after human approval in Step 6
    - If `requires_approval`: confirm again before writing

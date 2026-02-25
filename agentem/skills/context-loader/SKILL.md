@@ -25,6 +25,7 @@ Before performing your primary task, load and validate the project's context fil
    - `context/standards/review-playbook.md`
    - `context/standards/spec-standards.md`
    - `context/learnings/what-doesnt.md`
+   - `context/learnings/what-works.md`
    - Any additional `.md` files present
 
 4. **Check for placeholder content.** Scan each file for `[placeholder]` patterns (text in square brackets with uppercase first letter, e.g. `[Your Product Name]`, `[Team Name]`). If a file has many unfilled placeholders, note which files need filling.

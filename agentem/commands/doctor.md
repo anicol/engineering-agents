@@ -16,6 +16,7 @@ Diagnostic command that checks context file completeness, environment variables,
    - `context/standards/review-playbook.md`
    - `context/standards/spec-standards.md`
    - `context/learnings/what-doesnt.md`
+   - `context/learnings/what-works.md`
 
 2. **For each file that exists**, assess completeness:
    - Count total words
@@ -63,8 +64,9 @@ Context Files:
   context/standards/review-playbook.md .... Ready (180 words, 1 placeholder)
   context/standards/spec-standards.md ..... Missing
   context/learnings/what-doesnt.md ........ Needs work (15 words, 4 placeholders)
+  context/learnings/what-works.md ......... Needs work (12 words, 4 placeholders)
 
-Status: 2 of 7 context files ready
+Status: 2 of 8 context files ready
 
 Environment:
   GITHUB_TOKEN ............................ OK
@@ -110,6 +112,7 @@ Agent State:
      5. `standards/review-playbook.md` — needed for review orchestration
      6. `standards/spec-standards.md` — needed for spec generation
      7. `learnings/what-doesnt.md` — improves quality over time
+     8. `learnings/what-works.md` — reinforces proven patterns
 
 9. **Next step prompt** — depends on status:
 
