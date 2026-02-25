@@ -93,6 +93,21 @@ disabled: {}
 
 Agents also remember what they've done between runs, learn from your feedback, and offer to chain to relevant follow-up agents when they finish.
 
+## Security & permissions
+
+Agents use the `gh` CLI for all GitHub interactions. Here's what they can do, grouped by risk:
+
+| Risk tier | Actions | Agents | gh command |
+|-----------|---------|--------|------------|
+| **Read-only** | Scan repos, PRs, issues | Risk Detector | `gh pr list`, `gh issue list` |
+| **Write (local)** | Save specs, retros, release notes to your repo | Spec Generator, Release Manager, Retro Analyzer | File writes only |
+| **Write (GitHub)** | Create issues, comment on PRs | All 6 agents | `gh issue create`, `gh pr comment` |
+| **Write (assignments)** | Assign PR reviewers, create releases | Review Orchestrator, Release Manager | `gh pr edit --add-reviewer`, `gh release create` |
+
+**Agents never perform destructive actions.** They will not close issues, merge PRs, delete branches, force-push, or modify sprint scope. These are outside agent scope by design.
+
+Every action above defaults to `requires_approval` — the agent shows you the exact command and asks before executing. You control this per-action in `context/autonomy.yaml`. The template includes risk tier annotations so you can make informed decisions about what to make autonomous.
+
 ## What this doesn't include
 
 - **Background automation** - Watch mode runs in-session. No cron scheduling, webhook triggers, or Slack delivery.

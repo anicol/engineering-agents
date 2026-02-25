@@ -7,6 +7,31 @@
 #   disabled         — Agent skips the action silently
 #
 # Actions not listed here default to requires_approval.
+#
+# Action risk tiers (use these to guide your config):
+#
+#   READ-ONLY (safe to make autonomous)
+#     risk-detector:    scan
+#
+#   WRITE TO LOCAL FILES (low risk — changes stay in your repo)
+#     spec-generator:   save-spec
+#     release-manager:  save-artifacts
+#     retro-analyzer:   save-retro, update-learnings
+#
+#   WRITE TO GITHUB (moderate risk — visible to your team)
+#     spec-generator:   create-issue          # gh issue create
+#     ticket-decomposer: create-issues        # gh issue create (batch)
+#     risk-detector:    create-issue           # gh issue create
+#     risk-detector:    comment-on-pr          # gh pr comment
+#     retro-analyzer:   create-issues          # gh issue create
+#     review-orchestrator: nudge-stale-prs     # gh pr comment
+#
+#   WRITE TO GITHUB — ASSIGNMENTS & RELEASES (higher risk)
+#     review-orchestrator: assign-reviewers    # gh pr edit --add-reviewer
+#     release-manager:  create-release         # gh release create
+#
+# Agents NEVER perform destructive actions (closing issues, merging PRs,
+# deleting branches, force-pushing). These are outside the agent scope.
 
 autonomous: {}
   # risk-detector:
