@@ -4,7 +4,7 @@ description: Scaffold context files in your project
 
 # /agentem:init
 
-Scaffold the `context/` directory in the user's project root with templates for all 7 context files.
+Scaffold the `context/` directory in the user's project root with 8 context files and the autonomy config.
 
 ## Steps
 
@@ -22,12 +22,19 @@ context/
 ├── team/capacity.md
 ├── standards/review-playbook.md
 ├── standards/spec-standards.md
-└── learnings/what-doesnt.md
+├── learnings/what-doesnt.md
+├── learnings/what-works.md
+└── autonomy.yaml
 ```
 
 3. **For each file**, read the corresponding template from `${CLAUDE_PLUGIN_ROOT}/context-templates/` and write a copy into the project's `context/` directory. Skip any files that already exist.
 
-4. **Output a summary:**
+4. **Add `context/agent-state.json` to `.gitignore`.** The state file is machine-specific and should not be committed. Check if `.gitignore` exists in the project root:
+   - If it exists, read it and check if `context/agent-state.json` is already listed. If not, append `context/agent-state.json` on a new line.
+   - If it doesn't exist, create `.gitignore` with `context/agent-state.json` as its content.
+   - Do NOT create the state file itself — it is auto-created on first agent run.
+
+5. **Output a summary:**
 
 ```
 Created context files:
@@ -38,8 +45,14 @@ Created context files:
   context/standards/review-playbook.md
   context/standards/spec-standards.md
   context/learnings/what-doesnt.md
+  context/learnings/what-works.md
+  context/autonomy.yaml
+
+Added to .gitignore:
+  context/agent-state.json
 
 Start with context/product/strategy.md — it grounds everything else.
+Edit context/autonomy.yaml to configure what agents can do without asking.
 Run /agentem:doctor to check your progress.
 ```
 
@@ -54,3 +67,5 @@ Run /agentem:doctor to check your progress.
 | `context/standards/review-playbook.md` | `${CLAUDE_PLUGIN_ROOT}/context-templates/standards/review-playbook.md` |
 | `context/standards/spec-standards.md` | `${CLAUDE_PLUGIN_ROOT}/context-templates/standards/spec-standards.md` |
 | `context/learnings/what-doesnt.md` | `${CLAUDE_PLUGIN_ROOT}/context-templates/learnings/what-doesnt.md` |
+| `context/learnings/what-works.md` | `${CLAUDE_PLUGIN_ROOT}/context-templates/learnings/what-works.md` |
+| `context/autonomy.yaml` | `${CLAUDE_PLUGIN_ROOT}/context-templates/autonomy.yaml` |

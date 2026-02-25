@@ -1,0 +1,63 @@
+# AgentEM Autonomy Configuration
+# Controls what actions agents can take without asking.
+#
+# Modes:
+#   autonomous       — Agent executes the action without asking
+#   requires_approval — Agent shows the command and asks Execute? [y/n] (default)
+#   disabled         — Agent skips the action silently
+#
+# Actions not listed here default to requires_approval.
+#
+# Action risk tiers (use these to guide your config):
+#
+#   READ-ONLY (safe to make autonomous)
+#     risk-detector:    scan
+#
+#   WRITE TO LOCAL FILES (low risk — changes stay in your repo)
+#     spec-generator:   save-spec
+#     release-manager:  save-artifacts
+#     retro-analyzer:   save-retro, update-learnings
+#
+#   WRITE TO GITHUB (moderate risk — visible to your team)
+#     spec-generator:   create-issue          # gh issue create
+#     ticket-decomposer: create-issues        # gh issue create (batch)
+#     risk-detector:    create-issue           # gh issue create
+#     risk-detector:    comment-on-pr          # gh pr comment
+#     retro-analyzer:   create-issues          # gh issue create
+#     review-orchestrator: nudge-stale-prs     # gh pr comment
+#
+#   WRITE TO GITHUB — ASSIGNMENTS & RELEASES (higher risk)
+#     review-orchestrator: assign-reviewers    # gh pr edit --add-reviewer
+#     release-manager:  create-release         # gh release create
+#
+# Agents NEVER perform destructive actions (closing issues, merging PRs,
+# deleting branches, force-pushing). These are outside the agent scope.
+
+autonomous: {}
+  # risk-detector:
+  #   - scan
+
+requires_approval:
+  review-orchestrator:
+    - assign-reviewers
+    - nudge-stale-prs
+  risk-detector:
+    - create-issue
+    - comment-on-pr
+  release-manager:
+    - create-release
+    - save-artifacts
+  spec-generator:
+    - save-spec
+    - create-issue
+  ticket-decomposer:
+    - create-issues
+  retro-analyzer:
+    - update-learnings
+    - save-retro
+    - create-issues
+
+disabled: {}
+
+escalation:
+  critical_risk: log-only

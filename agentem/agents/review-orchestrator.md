@@ -1,7 +1,7 @@
 ---
 name: review-orchestrator
 description: "Analyzes open PRs and suggests optimal reviewers based on expertise, load balance, and knowledge-spreading goals. Generates review summaries for complex PRs."
-tools: [Read, Grep, Glob, Bash]
+tools: [Read, Grep, Glob, Bash, Write]
 skills: [context-loader]
 requires:
   env:
@@ -51,6 +51,50 @@ For PRs > 500 lines:
 - Aging report (PRs exceeding SLA)
 - Load balance report (reviews per engineer)
 - Summaries for large PRs
+
+### Step 6: Actions
+For each actionable recommendation, check `context/autonomy.yaml`:
+
+1. **Assign reviewers** (`assign-reviewers`):
+   - `gh pr edit {number} --add-reviewer {primary},{secondary}`
+   - If `autonomous`: execute directly
+   - If `requires_approval`: show exact command per PR and ask `Execute? [y/n]`
+   - If `disabled`: skip
+
+2. **Nudge stale PRs** (`nudge-stale-prs`):
+   - `gh pr comment {number} --body "👋 Review reminder: This PR has been waiting {X} hours. Assigned reviewers: {names}. SLA: {Y} hours."`
+   - If `autonomous`: execute directly
+   - If `requires_approval`: show exact command and ask `Execute? [y/n]`
+   - If `disabled`: skip
+
+Log all executed actions to the state file in Step 7.
+
+### Step 7: Update State
+1. Read `context/agent-state.json` if it exists, otherwise initialize an empty `{"version": 1, "agents": {}}` structure.
+2. Update the `review-orchestrator` entry:
+   - Set `last_run` to current ISO 8601 timestamp
+   - Increment `run_count`
+   - Set `last_summary` to a one-line description (e.g., "Routed 3 PRs, assigned 5 reviewers, 1 PR exceeding SLA")
+   - Add any new signals (e.g., reviewer overloaded, SLA breach) to `signals` array
+   - Resolve signals that no longer apply
+   - Log actions taken (reviewer assignments, nudge comments) to `actions_taken`
+3. Write updated JSON back to `context/agent-state.json` using the Write tool.
+
+### Step 8: Chain Offers
+Based on review analysis, offer relevant follow-up agents:
+- If any PR is large/complex (>500 lines): "Run risk-detector to assess risks on PR #{number}?"
+- If review backlog is growing: "Run risk-detector for a full risk scan?"
+
+Only offer chains that are directly relevant. Present as a simple list. User can accept, decline, or skip.
+
+### Step 9: Feedback
+Ask the user:
+```
+Was this output useful?  [Y] Yes  [P] Partially  [N] No
+```
+- Store response in `context/agent-state.json` under `agents.review-orchestrator.feedback` array with timestamp and rating
+- If `Partially` or `No`: ask "Brief note on what could improve?" and store as `feedback_note`
+- If user skips or doesn't respond, do not store anything
 
 ## Error Handling
 - No CODEOWNERS file → use topology ownership map as fallback

@@ -1,6 +1,6 @@
 # AgentEM - Engineering Management Agents for Claude Code
 
-6 AI agents that handle specs, ticket decomposition, risk detection, review routing, release management, and sprint retrospectives. Encoded with your team's engineering judgment.
+6 AI agents that handle specs, ticket decomposition, risk detection, review routing, release management, and sprint retrospectives. They remember what they've done, take real actions, chain intelligently, and learn from your feedback. Encoded with your team's engineering judgment.
 
 ## Install
 
@@ -11,14 +11,14 @@
 
 ## What you get
 
-| Agent | What it does |
-|-------|-------------|
-| **Spec Generator** | Turns product briefs into implementation specs that respect your architecture and team constraints |
-| **Ticket Decomposer** | Breaks specs into right-sized tickets with acceptance criteria, estimates, and sprint sequencing |
-| **Risk Detector** | Scans for stale PRs, blocked work, scope creep, capacity overload, and dependency risks |
-| **Review Orchestrator** | Maps PRs to the right reviewers based on ownership, expertise, and load balance |
-| **Release Manager** | Generates release notes, changelog, go/no-go checklist, and stakeholder updates |
-| **Retro Analyzer** | Pulls sprint metrics, identifies patterns, generates retro docs, proposes learnings updates |
+| Command | What it does |
+|---------|-------------|
+| `/agentem:spec-generator` | Turns product briefs into specs, saves them, creates tracking issues |
+| `/agentem:ticket-decomposer` | Breaks specs into tickets, creates GitHub issues in batch or individually |
+| `/agentem:risk-detector` | Scans for risks, creates issues for critical risks, comments on stale PRs |
+| `/agentem:review-orchestrator` | Assigns reviewers to PRs, nudges stale reviews, balances review load |
+| `/agentem:release-manager` | Generates release artifacts, creates GitHub releases, saves changelogs |
+| `/agentem:retro-analyzer` | Generates retro docs, updates learnings, creates action item issues |
 
 ## Quick start
 
@@ -28,7 +28,7 @@
    ```
    /agentem:init
    ```
-   This creates 7 context files in `context/` - your product strategy, architecture map, team topology, capacity, review standards, spec conventions, and learnings.
+   This creates 8 context files in `context/` - your product strategy, architecture map, team topology, capacity, review standards, spec conventions, and learnings (what works + what doesn't).
 
 3. **Fill in context files.** Start with `context/product/strategy.md`. The more specific you are, the better the agents perform. "We use microservices" is useless. "We have 4 services: auth (Python/FastAPI), api (TypeScript/Express), worker (Go), dashboard (Next.js)" is useful.
 
@@ -37,7 +37,11 @@
    /agentem:doctor
    ```
 
-5. **Run an agent.** Ask Claude to generate a spec, decompose tickets, scan for risks, or any of the 6 agent tasks.
+5. **Run an agent:**
+   ```
+   /agentem:risk-detector
+   /agentem:spec-generator
+   ```
 
 6. **Run the full flow:**
    ```
@@ -45,13 +49,21 @@
    ```
    This chains spec generation, ticket decomposition, and risk detection.
 
-## Commands
+## All commands
 
 | Command | What it does |
 |---------|-------------|
-| `/agentem:init` | Scaffold `context/` directory with 7 template files |
-| `/agentem:doctor` | Check which context files exist and how complete they are |
-| `/agentem:sprint-plan` | End-to-end: spec, tickets, risk scan |
+| `/agentem:spec-generator` | Turns product briefs into specs, saves them, creates tracking issues |
+| `/agentem:ticket-decomposer` | Breaks specs into tickets, creates GitHub issues in batch or individually |
+| `/agentem:risk-detector` | Scans for risks, creates issues for critical risks, comments on stale PRs |
+| `/agentem:review-orchestrator` | Assigns reviewers to PRs, nudges stale reviews, balances review load |
+| `/agentem:release-manager` | Generates release artifacts, creates GitHub releases, saves changelogs |
+| `/agentem:retro-analyzer` | Generates retro docs, updates learnings, creates action item issues |
+| `/agentem:sprint-plan` | End-to-end: spec → tickets → risk scan |
+| `/agentem:init` | Scaffold `context/` directory with 8 template files + autonomy config |
+| `/agentem:doctor` | Check context files, autonomy config, agent state, and agent readiness |
+| `/agentem:status` | Dashboard: agent activity, risks, PR status, sprint health, effectiveness |
+| `/agentem:watch` | Poll GitHub for events and trigger agents (new PRs, stale PRs, merges) |
 
 ## Context files
 
@@ -66,14 +78,52 @@ The agents are only as good as the context you give them. Generic prompts produc
 | `standards/review-playbook.md` | Review philosophy, SLAs, focus areas, patterns | Review Orchestrator |
 | `standards/spec-standards.md` | Spec structure, conventions, quality bar | Spec Generator |
 | `learnings/what-doesnt.md` | Anti-patterns to avoid (updated after retros) | All agents |
+| `autonomy.yaml` | What agents can do without asking | All agents |
+
+## Autonomy config
+
+By default, agents ask before taking any action. Edit `context/autonomy.yaml` to control this:
+
+```yaml
+# Actions agents execute without asking
+autonomous:
+  risk-detector:
+    - scan
+
+# Actions that require your approval (default)
+requires_approval:
+  review-orchestrator:
+    - assign-reviewers
+  spec-generator:
+    - save-spec
+
+# Actions agents will never take
+disabled: {}
+```
+
+Agents also remember what they've done between runs, learn from your feedback, and offer to chain to relevant follow-up agents when they finish.
+
+## Security & permissions
+
+Agents use the `gh` CLI for all GitHub interactions. Here's what they can do, grouped by risk:
+
+| Risk tier | Actions | Agents | gh command |
+|-----------|---------|--------|------------|
+| **Read-only** | Scan repos, PRs, issues | Risk Detector | `gh pr list`, `gh issue list` |
+| **Write (local)** | Save specs, retros, release notes to your repo | Spec Generator, Release Manager, Retro Analyzer | File writes only |
+| **Write (GitHub)** | Create issues, comment on PRs | All 6 agents | `gh issue create`, `gh pr comment` |
+| **Write (assignments)** | Assign PR reviewers, create releases | Review Orchestrator, Release Manager | `gh pr edit --add-reviewer`, `gh release create` |
+
+**Agents never perform destructive actions.** They will not close issues, merge PRs, delete branches, force-push, or modify sprint scope. These are outside agent scope by design.
+
+Every action above defaults to `requires_approval` — the agent shows you the exact command and asks before executing. You control this per-action in `context/autonomy.yaml`. The template includes risk tier annotations so you can make informed decisions about what to make autonomous.
 
 ## What this doesn't include
 
-- **Automation** - No cron scheduling, webhook triggers, or Slack delivery. Agents run when you invoke them.
+- **Background automation** - Watch mode runs in-session. No cron scheduling, webhook triggers, or Slack delivery.
 - **Integrations** - No Linear/Jira/Slack API connections. Agents use `gh` CLI when available, filesystem otherwise.
-- **Intelligence layer** - No confidence-based routing or autonomous execution. Agents run on request, with human review.
 
-These are part of the paid consulting tier. The plugin gives you the agents and context structure. The consulting engagement adds extraction interviews, automation, integrations, and tuning.
+These are part of the paid consulting tier. The plugin gives you the agents, actions, memory, and context structure. The consulting engagement adds extraction interviews, background automation, integrations, and tuning.
 
 ## Ready to go further?
 
